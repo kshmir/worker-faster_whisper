@@ -9,7 +9,7 @@ import numpy as np
 
 from runpod.serverless.utils import rp_cuda
 
-from faster_whisper import WhisperModel
+from faster_whisper import WhisperModel,BatchedInferencePipeline
 from faster_whisper.utils import format_timestamp
 
 
@@ -26,7 +26,7 @@ class Predictor:
             device="cuda" if rp_cuda.is_available() else "cpu",
             compute_type="float16" if rp_cuda.is_available() else "int8")
 
-        return model_name, loaded_model
+        return model_name, BatchedInferencePipeline(loaded_model)
 
     def setup(self):
         """Load the model into memory to make running multiple predictions efficient"""
